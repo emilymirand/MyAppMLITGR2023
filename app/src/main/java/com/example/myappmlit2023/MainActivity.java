@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.myappmlit2023.ml.FlowerModel;
+import com.example.myappmlit2023.ml.ActorModel;
 import com.example.myappmlit2023.ml.ModeloFlores;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -202,11 +202,11 @@ public class MainActivity
             //Definir Estiquetas de acuerdo a su archivo "labels.txt" generado por la Plataforma de creación del Modelo
             String[] etiquetas = {"Mario Bermúdez ", "Pedro Valencia","Derian Salazar", "Lucia Briones", "Sonia Briones ","Esperanza Agila"};
 
-            FlowerModel model = FlowerModel.newInstance(getApplicationContext());
+            ActorModel model = ActorModel.newInstance(getApplicationContext());
             TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
             inputFeature0.loadBuffer(convertirImagenATensorBuffer(mSelectedImage));
 
-            FlowerModel.Outputs outputs = model.process(inputFeature0);
+            ActorModel.Outputs outputs = model.process(inputFeature0);
             TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
 
             txtResults.setText(obtenerEtiquetayProbabilidad(etiquetas, outputFeature0.getFloatArray()));
