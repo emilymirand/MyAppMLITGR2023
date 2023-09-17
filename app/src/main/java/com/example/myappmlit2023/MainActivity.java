@@ -15,7 +15,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.myappmlit2023.ml.FlowerModel;
+import com.example.myappmlit2023.ml.ActorModel;
+import com.example.myappmlit2023.ml.Campus;
 import com.example.myappmlit2023.ml.ModeloFlores;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -46,8 +47,9 @@ public class MainActivity
     implements OnSuccessListener<Text>,
         OnFailureListener {
 
-    public static int REQUEST_CAMERA = 111;
-    public static int REQUEST_GALLERY = 222;
+    private static final int REQUEST_CAMERA = 111;
+    private static final int REQUEST_GALLERY = 113;
+    private boolean isCameraSource = true;
 
     Bitmap mSelectedImage;
     ImageView mImageView;
@@ -61,17 +63,27 @@ public class MainActivity
         txtResults = findViewById(R.id.txtresults);
     }
 
-    public void abrirGaleria(View view) {
-        Intent i = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(i, REQUEST_GALLERY);
+    private void initializeViews() {
+        txtResults = findViewById(R.id.txtresults);
+        mImageView = findViewById(R.id.image_view);
     }
 
-    public void abrirCamera(View view) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQUEST_CAMERA);
+    public void onCameraButtonClick(View view) {
+        launchCamera();
+    }
+    public void onGalleryButtonClick(View view) {
+        isCameraSource = false;
+        launchGallery();
     }
 
+    private void launchCamera() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
+        startActivityForResult(cameraIntent, REQUEST_CAMERA);
+    }
+    private void launchGallery() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, REQUEST_GALLERY);
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -86,14 +98,6 @@ public class MainActivity
                 throw new RuntimeException(e);
             }
         }
-    }
-
-    public void OCRfx(View v) {
-        InputImage image = InputImage.fromBitmap(mSelectedImage, 0);
-        TextRecognizer recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
-        recognizer.process(image)
-                .addOnSuccessListener(this)
-                .addOnFailureListener(this);
     }
 
     @Override
@@ -123,42 +127,6 @@ public class MainActivity
         txtResults.setText(resultados);
     }
 
-    public void Rostrosfx(View v) {
-        BitmapDrawable drawable = (BitmapDrawable) mImageView.getDrawable();
-        Bitmap bitmap = drawable.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
-        Canvas canvas = new Canvas(bitmap);
-        Paint paint = new Paint();
-        paint.setColor(Color.BLUE);
-        paint.setStrokeWidth(15);
-        paint.setStyle(Paint.Style.STROKE);
-
-        InputImage image = InputImage.fromBitmap(mSelectedImage, 0);
-        FaceDetectorOptions options =
-                new FaceDetectorOptions.Builder()
-                        .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
-                        .setContourMode(FaceDetectorOptions.CONTOUR_MODE_ALL)
-                        .build();
-        FaceDetector detector = FaceDetection.getClient(options);
-        detector.process(image)
-                .addOnSuccessListener(new OnSuccessListener<List<Face>>() {
-                    @Override
-                    public void onSuccess(List<Face> faces) {
-                        if (faces.size() == 0) {
-                            txtResults.setText("No Hay rostros");
-                        } else {
-                            txtResults.setText("Hay " + faces.size() + " rostro(s)");
-
-                            for (Face rostro : faces) {
-                                canvas.drawRect(rostro.getBoundingBox(), paint);
-                            }
-
-                        }
-                    }
-                })
-                .addOnFailureListener(this);
-
-        mImageView.setImageBitmap(bitmap);
-    }
     public ByteBuffer convertirImagenATensorBuffer(Bitmap mSelectedImage){
 
         Bitmap imagen = Bitmap.createScaledBitmap(mSelectedImage, 224, 224, true);
@@ -200,13 +168,14 @@ public class MainActivity
         try {
 
             //Definir Estiquetas de acuerdo a su archivo "labels.txt" generado por la Plataforma de creación del Modelo
-            String[] etiquetas = {"Mario Bermúdez ", "Pedro Valencia","Derian Salazar", "Lucia Briones", "Sonia Briones ","Esperanza Agila"};
+            String[] etiquetas = {"Baños ", "Laboratorio Industrial","Laboratorio Agroindustrial", "FCIP", "Comedor ","Centro Medico ", "Laboratorio de Acuicultura "
+                    , "FCI ", "FCAYF ", "Parqueadero ", "Biblioteca ", "Polideportivo ", "Auditorio ", "Laboratorio de Suelos "};
 
-            FlowerModel model = FlowerModel.newInstance(getApplicationContext());
+            Campus model = Campus.newInstance(getApplicationContext());
             TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
             inputFeature0.loadBuffer(convertirImagenATensorBuffer(mSelectedImage));
 
-            FlowerModel.Outputs outputs = model.process(inputFeature0);
+            Campus.Outputs outputs = model.process(inputFeature0);
             TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
 
             txtResults.setText(obtenerEtiquetayProbabilidad(etiquetas, outputFeature0.getFloatArray()));

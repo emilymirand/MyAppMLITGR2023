@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:onClick="abrirCamera"
     tools:context=".MainActivity">
 
     <TextView
@@ -12,33 +13,34 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:background="#FFEB3B"
-        android:text="Google ML Kit"
+        android:text="CAMPUS &quot;LA MARÍA&quot;"
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="10dp" />
 
     <Button
         android:id="@+id/btGallery"
-        android:layout_margin="5dp"
         android:layout_width="0dp"
         android:layout_height="55dp"
-        android:onClick="abrirGaleria"
-         android:text="Galería"
-         app:layout_constraintTop_toBottomOf="@+id/txtTitulo"
-         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/btCamera" />
+        android:layout_margin="5dp"
+        android:onClick="onGalleryButtonClick"
+        android:text="Galería"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/btCamera"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitulo" />
 
     <Button
         android:id="@+id/btCamera"
-        android:layout_margin="5dp"
         android:layout_width="0dp"
         android:layout_height="55dp"
-        android:onClick="abrirCamera"
+        android:layout_margin="5dp"
+        android:onClick="onCameraButtonClick"
         android:text="Cámara"
-        app:layout_constraintTop_toBottomOf="@+id/txtTitulo"
         app:layout_constraintLeft_toRightOf="@+id/btGallery"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitulo" />
 
 
     <ImageView
@@ -48,7 +50,7 @@
         android:layout_margin="10dp"
         app:layout_constraintBottom_toTopOf="@+id/txtresults"
         app:layout_constraintTop_toBottomOf="@+id/btGallery"
-        app:srcCompat="@drawable/img"
+        app:srcCompat="@drawable/portadauteq"
         tools:layout_editor_absoluteX="10dp" />
 
     <TextView
@@ -59,40 +61,22 @@
         android:inputType="textMultiLine"
         android:scrollbars="vertical"
         android:text="Resultados:"
-        app:layout_constraintBottom_toTopOf="@id/btText"
-        tools:layout_editor_absoluteX="10dp" />
+        app:layout_constraintBottom_toTopOf="@+id/btPersonalizado"
+        tools:layout_editor_absoluteX="90dp" />
 
-    <Button
-        android:id="@+id/btText"
-        android:text="OCR"
-        android:layout_margin="10dp"
-        android:layout_width="0dp"
-        android:layout_height="55dp"
-        android:onClick="OCRfx"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/btFace"
-        app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <Button
-        android:id="@+id/btFace"
-        android:layout_margin="10dp"
-        android:layout_width="0dp"
-        android:layout_height="55dp"
-        android:onClick="Rostrosfx"
-        android:text="Rostros"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/btPersonalizado"
-        app:layout_constraintLeft_toRightOf="@id/btText" />
 
     <Button
         android:id="@+id/btPersonalizado"
         android:layout_width="0dp"
         android:layout_height="55dp"
         android:layout_margin="10dp"
+        android:layout_marginBottom="8dp"
         android:onClick="PersonalizedModel"
         android:text="Modelo"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/btFace"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
