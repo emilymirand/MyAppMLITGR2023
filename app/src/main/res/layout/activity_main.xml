@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:onClick="abrirCamera"
+    android:onClick="onGalleryButtonClick"
     tools:context=".MainActivity">
 
     <TextView
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:background="#FFEB3B"
-        android:text="CAMPUS &quot;LA MARÍA&quot;"
+        android:text="CAMPUS LA MARIA"
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -60,10 +60,9 @@
         android:layout_margin="10dp"
         android:inputType="textMultiLine"
         android:scrollbars="vertical"
-        android:text="Resultados:"
+        android:text="Resultados"
         app:layout_constraintBottom_toTopOf="@+id/btPersonalizado"
         tools:layout_editor_absoluteX="90dp" />
-
 
 
     <Button

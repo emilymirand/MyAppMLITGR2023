@@ -16,8 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myappmlit2023.ml.ActorModel;
-import com.example.myappmlit2023.ml.Campus;
-import com.example.myappmlit2023.ml.ModeloFlores;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.mlkit.vision.common.InputImage;
@@ -31,7 +30,7 @@ import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
 import org.tensorflow.lite.DataType;
-import org.tensorflow.lite.support.image.TensorImage;
+
 import org.tensorflow.lite.support.label.Category;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
@@ -39,7 +38,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.text.DecimalFormat;
-import java.util.Collections;
 import java.util.List;
 
 public class MainActivity
@@ -47,10 +45,9 @@ public class MainActivity
     implements OnSuccessListener<Text>,
         OnFailureListener {
 
-    private static final int REQUEST_CAMERA = 111;
-    private static final int REQUEST_GALLERY = 113;
+    public static int REQUEST_CAMERA = 111;
+    public static int REQUEST_GALLERY = 222;
     private boolean isCameraSource = true;
-
     Bitmap mSelectedImage;
     ImageView mImageView;
     TextView txtResults;
@@ -61,11 +58,6 @@ public class MainActivity
         setContentView(R.layout.activity_main);
         mImageView = findViewById(R.id.image_view);
         txtResults = findViewById(R.id.txtresults);
-    }
-
-    private void initializeViews() {
-        txtResults = findViewById(R.id.txtresults);
-        mImageView = findViewById(R.id.image_view);
     }
 
     public void onCameraButtonClick(View view) {
@@ -84,6 +76,7 @@ public class MainActivity
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, REQUEST_GALLERY);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -98,6 +91,14 @@ public class MainActivity
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public void OCRfx(View v) {
+        InputImage image = InputImage.fromBitmap(mSelectedImage, 0);
+        TextRecognizer recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
+        recognizer.process(image)
+                .addOnSuccessListener(this)
+                .addOnFailureListener(this);
     }
 
     @Override
@@ -127,6 +128,42 @@ public class MainActivity
         txtResults.setText(resultados);
     }
 
+    public void Rostrosfx(View v) {
+        BitmapDrawable drawable = (BitmapDrawable) mImageView.getDrawable();
+        Bitmap bitmap = drawable.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+        paint.setColor(Color.BLUE);
+        paint.setStrokeWidth(15);
+        paint.setStyle(Paint.Style.STROKE);
+
+        InputImage image = InputImage.fromBitmap(mSelectedImage, 0);
+        FaceDetectorOptions options =
+                new FaceDetectorOptions.Builder()
+                        .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
+                        .setContourMode(FaceDetectorOptions.CONTOUR_MODE_ALL)
+                        .build();
+        FaceDetector detector = FaceDetection.getClient(options);
+        detector.process(image)
+                .addOnSuccessListener(new OnSuccessListener<List<Face>>() {
+                    @Override
+                    public void onSuccess(List<Face> faces) {
+                        if (faces.size() == 0) {
+                            txtResults.setText("No Hay rostros");
+                        } else {
+                            txtResults.setText("Hay " + faces.size() + " rostro(s)");
+
+                            for (Face rostro : faces) {
+                                canvas.drawRect(rostro.getBoundingBox(), paint);
+                            }
+
+                        }
+                    }
+                })
+                .addOnFailureListener(this);
+
+        mImageView.setImageBitmap(bitmap);
+    }
     public ByteBuffer convertirImagenATensorBuffer(Bitmap mSelectedImage){
 
         Bitmap imagen = Bitmap.createScaledBitmap(mSelectedImage, 224, 224, true);
@@ -168,14 +205,14 @@ public class MainActivity
         try {
 
             //Definir Estiquetas de acuerdo a su archivo "labels.txt" generado por la Plataforma de creación del Modelo
-            String[] etiquetas = {"Baños ", "Laboratorio Industrial","Laboratorio Agroindustrial", "FCIP", "Comedor ","Centro Medico ", "Laboratorio de Acuicultura "
-                    , "FCI ", "FCAYF ", "Parqueadero ", "Biblioteca ", "Polideportivo ", "Auditorio ", "Laboratorio de Suelos "};
+            String[] etiquetas = {"Baños ", "Laboratorio Industrial","Laboratorio Agroindustrial", "FCIP", "Comedor ","Centro medico "
+                    ,"Laboratorio de Acuicultura","FCI ","FCAYF ","Parqueadero ","Biblioteca ","Polideportivo ","Auditorio ","Laboratorio de Suelos "};
 
-            Campus model = Campus.newInstance(getApplicationContext());
+            ActorModel model = ActorModel.newInstance(getApplicationContext());
             TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
             inputFeature0.loadBuffer(convertirImagenATensorBuffer(mSelectedImage));
 
-            Campus.Outputs outputs = model.process(inputFeature0);
+            ActorModel.Outputs outputs = model.process(inputFeature0);
             TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
 
             txtResults.setText(obtenerEtiquetayProbabilidad(etiquetas, outputFeature0.getFloatArray()));
