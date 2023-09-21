@@ -48,6 +48,7 @@ public class MainActivity
     public static int REQUEST_CAMERA = 111;
     public static int REQUEST_GALLERY = 222;
     private boolean isCameraSource = true;
+
     Bitmap mSelectedImage;
     ImageView mImageView;
     TextView txtResults;
