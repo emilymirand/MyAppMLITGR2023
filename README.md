@@ -1,9 +1,23 @@
 # MyAppMLITGR2023
-DEBER GRUPAL
-![image](https://github.com/emilymirand/MyAppMLITGR2023/assets/125322859/c84af8c2-65e5-4282-b4ac-8044155ec061)
-![image](https://github.com/emilymirand/MyAppMLITGR2023/assets/125322859/362d4348-1b6b-449f-a264-5aa4924e42e9)
-![image](https://github.com/emilymirand/MyAppMLITGR2023/assets/125322859/0e7e1ddf-e89d-4c60-b827-08b01c42690c)
-![image](https://github.com/emilymirand/MyAppMLITGR2023/assets/125322859/0aca84dc-78a8-4cd2-a964-d8d485a70e3f)
+Examen GRUPAL
+![image](https://github.com/emilymirand/MyAppMLITGR2023/assets/125322859/6572a51e-1140-4d66-9687-281ae3dfccd8)
+![image](https://github.com/emilymirand/MyAppMLITGR2023/assets/125322859/80482488-e2d4-47dd-a3c5-749f6d51ff8e)
+![image](https://github.com/emilymirand/MyAppMLITGR2023/assets/125322859/3cb7b83a-a38d-4cab-9a5f-e07af10e1acb)
+![image](https://github.com/emilymirand/MyAppMLITGR2023/assets/125322859/a7a2afc7-30ed-45df-8b5f-3a71336c8e6d)
+![image](https://github.com/emilymirand/MyAppMLITGR2023/assets/125322859/a8a3cffc-f8d1-40b1-a993-b95422abf299)
+![image](https://github.com/emilymirand/MyAppMLITGR2023/assets/125322859/c1e3ebe4-15eb-49b4-8be4-502dffe4007d)
+
+![image](https://github.com/emilymirand/MyAppMLITGR2023/assets/125322859/1390c7de-5997-4314-a6f9-8deb1329d295)
+
+![image](https://github.com/emilymirand/MyAppMLITGR2023/assets/125322859/1049dd7e-6b17-4db7-b53b-0cb373091d79)
+
+![image](https://github.com/emilymirand/MyAppMLITGR2023/assets/125322859/8474f55d-01b6-4b00-883e-96dee7fcdb5c)
+
+
+
+
+
+
 
 
 
